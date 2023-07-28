@@ -4,36 +4,79 @@
 
 ## 프로젝트 요약
 > 6인 팀 프로젝트
-> 2022.05.10 - 2022.06.8   
+> 2022.09.06 - 2022.12.09  
  
-> **스마트 홈 팀 프로젝트**
-* 기준치 이상의 진동 감지 시 LED와 부저, 스피커 모듈을 통한 위험 알림 및 LCD패널에 경고 문구를 띄우고 자동으로 출입문 개방
-* 불길 발생 시 LED와 부저, 스피커 모듈을 통한 위험 알림 및 LCD패널에 경고 문구를 띄우고 자동으로 창문 개방
-* 가스 누출 감지 시 부저를 통한 알림 및 자동으로 창문 개방
-* 온습도 센서를 통해 내부 온도 및 습도를 측정하고 온도에 따라 에어컨 작동
-* 토양 습도 센서를 이용해 집안 내 화초들의 토양 습도를 파악 후 토양 상태에 따라 3색 LED로 출력
-* 음성인식 모듈을 이용해 필요한 명령을 녹음한 후 사용자가 음성으로 집안 모듈들을 작동가능
-* 출입문과 창문, 주차장 개폐문은 서보모터를 이용해 각각 제어
-* 주차장에 입차 시 일정 시간이 지나면 스피커 모듈을 통한 알림
-* 스마트폰 앱을 통해 블루투스로 연결 후 서보모터 및 LED, LCD패널을 각각 원격 제어 가능
+> **스마트 미러 프로젝트**
+* 라즈베리파이에 구축한 매직 미러 서버를 통해 날씨, 캘린더, 현재 시간 디스플레이에 표시
+* 구글 어시스턴트와 같은 음성인식기술로 스포티파이 재생
+* 미러의 맨 하단에는 실시간으로 오늘자 뉴스기사가 깜빡임 모션을 통해 보여지도록 구현
 <br>
 
-## 프로젝트 로직
-<img src='smarthome logic.png' alt='mainScreen' height="500px"/>
+## 프로젝트 구성도 및 로직
+<img src='Smart Mirror System Operation.png' alt='Mirror Algorithm' height="500px"/>
+1. 라즈베리파이(클라이언트)에서 API(날씨, 구글 어시스턴트, 캘린더)를 요청
+<br> 
+2. Web Server에서 해당 Data 값(json 형태)로 응답
+<br>
+3. Google Assistant를 동작하기 위한 Google 인증을 Token 값을 받아 처리
+<br>
+4. 미러 뒤에 설치한 마이크 음성을 인식하여 구글 어시스턴트 서비스 실행
+<br>
+5. 구글 어시스턴트 실행 후 미리 설치한 Spotify 서비스를 호출
+
+## 스포티파이 음악 재생 명령어(noje js파일에서 명령어 구성하였으나 파일이 없어 올립니다)
+* 어시스턴트(자비스) 서비스 호출
+* "노래 찾기" : "스포티파이에서 (가수 이름)찾아줘"
+* "노래 멈추기" : "스포티파이 멈춰, 스포티파이 스탑, 스포티파이 스톱"
+* "노래 재생": "스포티파이 플레이"
+* "노래 일시정지" : "스포티파이 일시정지"
+* "음량 조절" : "스포티파이 음량(원하는 숫자 100)"
 
 ## 담당 역할
-### 무드등 제어
-![Langauge:C++](https://img.shields.io/badge/Language-C++-red) ![platform:Arduino](https://img.shields.io/badge/Platform-Arduino-red)
-* 3색 LED 모듈과 turnOnOffLights 메서드를 사용하여 외출 시 혹은 외출 하지 않을 시의 기능 구현
-* 블루투스 모듈(hm10)과 앱을 연동하여 문자(무드등: a,b)입력에 따른 무드등 제어 구현
-### 스마트 주차장
-![Langauge:C++](https://img.shields.io/badge/Language-C++-red) ![platform:Arduino](https://img.shields.io/badge/Platform-Arduino-red)
-* 서보모터 및 초음파 센서, LCD를 활용하여 감지거리에 따른 주차장 개폐
-* LCD를 통해 현재 차의 출입 여부 확인
-* 서보 모터에 5초간의 딜레이와 10도씩 증가를 통한 사물의 유무 확인
-### 식물 성장 감지 시스템
-![Langauge:C++](https://img.shields.io/badge/Language-C++-red) ![platform:Arduino](https://img.shields.io/badge/Platform-Arduino-red)
-* 3색 led를 통해 식물의 성장 조건에 입각한 수분 및 습도 확인
+![Langauge:NodeJS++](https://img.shields.io/badge/Language-NodeJS-orange) ![platform:RaspberryPI](https://img.shields.io/badge/Platform-RaspberryPI-orange)
+### 캡스톤 디자인 주제 선정 및 기획
+* 수업 첫 차시에 간단히 제작할 수 있으면서도 유용한 기능이 있는 제품군 검색
+* 주제를 선정하고 어떤 기능을 넣어야 할 지 팀원들과 논의
+  
+### open weather api, RaspberryPI 연동
+* 라즈베리파이 내의 config.js 파일에서 open weather api에서 받아온 api key를 넣어 현재 지역과 현재 날씨를 받아옴
+```
+{
+			module: "weather",
+			position: "top_right",
+			config: {
+				weatherProvider: "openweathermap",
+				type: "current",
+				location: "Seoul",
+				locationID: "1835847", //ID from http://bulk.openweathermap.org/sample/city.list.json.gz; unzip the gz file and find your city
+				apiKey: "여러분의 API KEY",
+				onlyTemp: true
+			}
+		},
+		{
+			module: "weather",
+			position: "top_right",
+			//header: "예보",
+			config: {
+				weatherProvider: "openweathermap",
+				type: "forecast",
+				location: "Seoul",
+				locationID: "1835847", //ID from http://bulk.openweathermap.org/sample/city.list.json.gz; unzip the gz file and find your city
+				apiKey: "여러분의 API KEY"
+			}
+		},
+```
 
+### 문서 정리 및 피드백
+* 프로젝트 차시 별로 진행한 내용, 예산요청지급서, 결과보고서 등을 작성
+* 담당 교수님과의 컨펌을 주도하여 프로젝트 시의 불편한 사항, 개선해야 할 부분에 대하여 논의
+
+## 사용 API 및 패키지
+* open weather: https://openweathermap.org/api
+* google assistant: https://developers.google.com/assistant/sdk/reference/rpc?hl=ko
+* google calender: https://developers.google.com/calendar/api/guides/overview?hl=ko
+* spotify:https://github.com/skuethe/MMM-Spotify
+* MagicMirror:https://github.com/MichMich/MagicMirror
+ 
 ## 결과 영상
-* 결과 보고서 확인
+* https://www.youtube.com/shorts/hSjICcPyh6Q
