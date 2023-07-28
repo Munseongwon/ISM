@@ -1,6 +1,6 @@
 # ISM
 ### 라즈베리파이 키트를 활용한 스마트 미러
-<img src='smarthome_intro.png' alt='mainScreen' height="500px"/>
+<img src='정면도.jpg' alt='front-screen' height="600px"/><img src='후면도.jpg' alt='back-screen' height="600px"/>
 
 ## 프로젝트 요약
 > 6인 팀 프로젝트
